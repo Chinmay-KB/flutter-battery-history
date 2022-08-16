@@ -1,7 +1,6 @@
 name: battery_history
 description: A new flutter plugin project.
 version: 0.0.1
-homepage:
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
@@ -10,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_isolate: ^2.0.2
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:
