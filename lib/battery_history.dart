@@ -1,19 +1,23 @@
 import 'dart:async';
-import 'dart:isolate';
 
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
 
 class BatteryHistory {
+  static const EventChannel stream = EventChannel("battery_history");
   FlutterIsolate? isolate;
   Future<void> startTick() async {
     final _pref = await SharedPreferences.getInstance();
     _pref.setStringList('time', []);
-    Timer.periodic(Duration(seconds: 2), (Timer t) async {
+    Timer.periodic(const Duration(seconds: 2), (Timer t) async {
       _pref.setStringList(
           'time', [..._pref.getStringList('time') ?? [], t.tick.toString()]);
     });
+  }
+
+  Stream<dynamic> batteryInfoStream() {
+    return stream.receiveBroadcastStream().map((event) => event);
   }
 
   Future<void> stopTick() async {

@@ -22,14 +22,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      history = BatteryHistory();
-      history.startTick();
-    });
-    if (mounted) {
-      history = BatteryHistory();
-      initPlatformState();
-    }
+    history = BatteryHistory();
+
+    // WidgetsBinding.instance?.addPostFrameCallback((_) {
+    // });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -50,15 +46,20 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: fetchData,
-          child: Icon(Icons.data_array),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: fetchData,
+        //   child: Icon(Icons.data_array),
+        // ),
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text(his),
+          child: StreamBuilder(
+            stream: history.batteryInfoStream(),
+            builder: (context, data) {
+              return Text(data.data.toString());
+            },
+          ),
         ),
       ),
     );
