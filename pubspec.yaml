@@ -1,5 +1,5 @@
 name: battery_history
-description: A new flutter plugin project.
+description: A simple flutter plugin to store charge cycles in local storage when app is in use
 version: 0.0.1
 
 environment:
