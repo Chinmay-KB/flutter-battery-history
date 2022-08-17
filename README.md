@@ -9,3 +9,4 @@ A simple plugin to monitor battery charging/discharging state when the app is in
 - it will consider the charge cycle to start from that instant only, and not
 - before.
 - The list of [BatteryHistory] provided is ordered by time, recent first
+- The plugin is tested for Android, not tested properly on iOS due to device issues.
