@@ -1,11 +1,9 @@
-import 'package:battery_history/battery_history_item.dart';
-import 'package:battery_history/battery_status.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:battery_history/battery_history.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 void main() {
@@ -72,6 +70,7 @@ class _MyAppState extends State<MyApp> {
                                 positionFactor: 0.1,
                                 angle: 90,
                                 widget: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
@@ -80,6 +79,14 @@ class _MyAppState extends State<MyApp> {
                                           '%',
                                       style: const TextStyle(
                                         fontSize: 80,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFFD6D5A8),
+                                      ),
+                                    ),
+                                    Text(
+                                      data.data!.status.chargingStatus,
+                                      style: const TextStyle(
+                                        fontSize: 24,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFFD6D5A8),
                                       ),
@@ -124,6 +131,8 @@ class _MyAppState extends State<MyApp> {
                     ),
                     Flexible(
                         child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                             itemCount: data.data!.history.length,
                             itemBuilder: (context, index) {
                               final item = data.data!.history[index];
@@ -133,52 +142,43 @@ class _MyAppState extends State<MyApp> {
                               final chargeDuration = item.chargingEnd.timestamp
                                   .difference(item.chargingStart.timestamp)
                                   .inMinutes;
+                              final chargeStartTime = DateFormat.yMd()
+                                  .add_jm()
+                                  .format(item.chargingStart.timestamp);
                               return Container(
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 4),
+                                key: ValueKey(chargeStartTime),
+                                margin: const EdgeInsets.symmetric(vertical: 4),
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: const Color(0xff1B2430),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color(0xff51557E),
-                                        blurRadius: 6.0,
-                                        spreadRadius: 0.0,
-                                        offset: Offset(
-                                          0.0,
-                                          3.0,
-                                        ),
-                                      )
-                                    ]),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: const Color(0xff1B2430),
+                                  border: Border.all(
+                                      color: const Color(0xff51557E)),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
+                                    Text(
+                                      chargeStartTime,
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.blueGrey.shade200),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Text(
-                                          'Battery charged by',
-                                          style: TextStyle(
-                                              color: Colors.blueGrey.shade200),
-                                        ),
-                                        Text(
-                                          chargePercent < 1
+                                        InfoSnippet(
+                                          title: 'Battery charged',
+                                          content: chargePercent < 1
                                               ? '<1%'
                                               : '$chargePercent %',
-                                          style: const TextStyle(
-                                              fontSize: 30,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xff7A86B6)),
                                         ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        const Text('Battery charged for'),
-                                        Text(chargeDuration < 1
-                                            ? '<1 min'
-                                            : '$chargeDuration minutes'),
+                                        InfoSnippet(
+                                            title: 'Charging duration',
+                                            content: chargeDuration < 1
+                                                ? '<1 min'
+                                                : '$chargeDuration mins'),
                                       ],
                                     ),
                                   ],
@@ -194,6 +194,36 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class InfoSnippet extends StatelessWidget {
+  const InfoSnippet({
+    Key? key,
+    required this.title,
+    required this.content,
+  }) : super(key: key);
+
+  final String title;
+  final String content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          content,
+          style: const TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Color(0xff7A86B6)),
+        ),
+        Text(
+          title,
+          style: TextStyle(color: Colors.blueGrey.shade200),
+        ),
+      ],
     );
   }
 }

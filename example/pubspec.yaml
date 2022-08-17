@@ -27,6 +27,7 @@ dependencies:
     path: ../
   syncfusion_flutter_gauges: ^20.2.44
   google_fonts: ^3.0.1
+  intl: ^0.17.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

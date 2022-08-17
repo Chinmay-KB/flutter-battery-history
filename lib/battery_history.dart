@@ -19,7 +19,7 @@ class BatteryHistoryPlugin {
   BatteryStatus? currentStatus;
 
   Stream<BatteryHistory> batteryInfoStream() async* {
-    final history = await getHistory();
+    var history = await getHistory();
     yield* stream.receiveBroadcastStream().map((event) {
       final status = batteryStatusFromJson(json.encode(event));
       // The plugin has just started listening to battery status
@@ -28,7 +28,7 @@ class BatteryHistoryPlugin {
       if (currentStatus?.chargingStatus == "charging" &&
           status.chargingStatus == "discharging") {
         setBatteryLog(currentStatus!, status).then((value) {
-          history.add(value);
+          history = [value, ...history];
         });
         currentStatus = null;
       } else if (currentStatus == null && status.chargingStatus == "charging") {
@@ -38,15 +38,6 @@ class BatteryHistoryPlugin {
       return BatteryHistory(status: status, history: history);
     });
   }
-
-  // Stream<List<BatteryHistoryItem>> batteryHistoryStream() async* {
-  //   _streamController = StreamController<List<BatteryHistoryItem>>();
-  //   addHistoryToStream();
-  // }
-
-  // Future<void> addHistoryToStream() async {
-  //   _streamController.add(await getHistory());
-  // }
 
   Future<BatteryHistoryItem> setBatteryLog(
       BatteryStatus start, BatteryStatus end) async {
@@ -63,6 +54,8 @@ class BatteryHistoryPlugin {
     return _pref
             .getStringList('history')
             ?.map((e) => BatteryHistoryItem.fromJson(json.decode(e)))
+            .toList()
+            .reversed
             .toList() ??
         [];
   }

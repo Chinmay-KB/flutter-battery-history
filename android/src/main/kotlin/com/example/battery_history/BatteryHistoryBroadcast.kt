@@ -15,11 +15,10 @@ class BatteryHistoryBroadcast(val event:EventChannel.EventSink?): BroadcastRecei
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onReceive(context: Context?, intent: Intent?) {
         var batteryManager = context?.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-        val tz: TimeZone = TimeZone.getTimeZone("UTC")
         val df: DateFormat =
-            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss") // Quoted "Z" to indicate UTC, no timezone offset
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'") // Quoted "Z" to indicate UTC, no timezone offset
 
-        df.setTimeZone(tz)
+
         event?.success(intent.let {
             var batteryLevel = batteryManager?.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
             when(it?.getIntExtra(BatteryManager.EXTRA_STATUS, -1)){
