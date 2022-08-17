@@ -3,7 +3,11 @@ import 'package:battery_history/src/models/battery_status.dart';
 /// Data class which holds all information regarding one charge cycle. One charge cycle is defined as
 class BatteryHistoryItem {
   BatteryHistoryItem({required this.chargingStart, required this.chargingEnd});
+
+  /// Battery status when the charge cycle started
   final BatteryStatus chargingStart;
+
+  /// Battery status when the charge cycle ended
   final BatteryStatus chargingEnd;
 
   factory BatteryHistoryItem.fromJson(Map<String, dynamic> json) =>
