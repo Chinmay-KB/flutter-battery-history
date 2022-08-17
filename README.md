@@ -1,15 +1,11 @@
 # battery_history
 
-A new flutter plugin project.
+A simple plugin to monitor battery charging/discharging state when the app is in non-terminated state, i.e - foreground or background
 
-## Getting Started
+## Note
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
+- The plugin can only monitor charge cycles when it is either in foreground or background, not in terminated state
+- If the device is already charging when the plugin is initialised, then
+- it will consider the charge cycle to start from that instant only, and not
+- before.
+- The list of [BatteryHistory] provided is ordered by time, recent first

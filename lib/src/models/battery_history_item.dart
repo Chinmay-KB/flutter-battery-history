@@ -1,5 +1,6 @@
-import 'package:battery_history/battery_status.dart';
+import 'package:battery_history/src/models/battery_status.dart';
 
+/// Data class which holds all information regarding one charge cycle. One charge cycle is defined as
 class BatteryHistoryItem {
   BatteryHistoryItem({required this.chargingStart, required this.chargingEnd});
   final BatteryStatus chargingStart;

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:battery_history/battery_history.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,27 +17,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   late BatteryHistoryPlugin history;
 
   @override
   void initState() {
     super.initState();
     history = BatteryHistoryPlugin();
-
-    // WidgetsBinding.instance?.addPostFrameCallback((_) {
-    // });
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-
-  String his = "3 2 1";
-
-  Future<void> fetchData() async {
-    final c = await history.getData();
-    setState(() {
-      his = c;
-    });
   }
 
   @override
@@ -47,12 +31,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(textTheme: GoogleFonts.khulaTextTheme()),
       home: SafeArea(
         child: Scaffold(
-          backgroundColor: Color(0xff1B2430),
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: fetchData,
-          //   child: Icon(Icons.data_array),
-          // ),
-
+          backgroundColor: const Color(0xff1B2430),
           body: StreamBuilder<BatteryHistory>(
             stream: history.batteryInfoStream(),
             builder: (context, data) {
@@ -60,7 +39,6 @@ class _MyAppState extends State<MyApp> {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Text(data.data!.status.chargingStatus),
                     SfRadialGauge(
                       enableLoadingAnimation: true,
                       axes: [
