@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_isolate: ^2.0.2
   shared_preferences: ^2.0.15
 
 dev_dependencies:

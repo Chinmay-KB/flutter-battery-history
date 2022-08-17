@@ -1,3 +1,5 @@
+import 'package:battery_history/battery_history_item.dart';
+import 'package:battery_history/battery_status.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -17,21 +19,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  late BatteryHistory history;
+  late BatteryHistoryPlugin history;
 
   @override
   void initState() {
     super.initState();
-    history = BatteryHistory();
+    history = BatteryHistoryPlugin();
 
     // WidgetsBinding.instance?.addPostFrameCallback((_) {
     // });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    history.startTick();
-  }
 
   String his = "3 2 1";
 
@@ -53,13 +52,29 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: StreamBuilder(
-            stream: history.batteryInfoStream(),
-            builder: (context, data) {
-              return Text(data.data.toString());
-            },
-          ),
+        body: StreamBuilder<BatteryHistory>(
+          stream: history.batteryInfoStream(),
+          builder: (context, data) {
+            if (data.data != null) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(data.data!.status.chargingStatus),
+                  Flexible(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: data.data?.history.length,
+                      itemBuilder: (context, index) {
+                        return Text('$index' ?? 'Unavailable');
+                      },
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );

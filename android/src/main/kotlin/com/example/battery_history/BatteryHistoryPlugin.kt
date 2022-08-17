@@ -18,6 +18,7 @@ class BatteryHistoryPlugin: FlutterPlugin, StreamHandler {
   private lateinit var batteryStateReceiver: BroadcastReceiver
   private lateinit var applicationContext: Context
 
+
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     applicationContext = flutterPluginBinding.applicationContext;
     channel = EventChannel(flutterPluginBinding.binaryMessenger, "battery_history")
