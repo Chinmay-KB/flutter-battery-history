@@ -17,7 +17,7 @@ class BatteryStatus {
   factory BatteryStatus.fromJson(Map<String, dynamic> json) => BatteryStatus(
       batteryLevel: json["battery_level"],
       chargingStatus: json["charging_status"],
-      timestamp: DateTime.now());
+      timestamp: DateTime.parse(json['timestamp']));
 
   Map<String, dynamic> toJson() => {
         "battery_level": batteryLevel,

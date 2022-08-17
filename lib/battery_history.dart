@@ -23,16 +23,18 @@ class BatteryHistoryPlugin {
     yield* stream.receiveBroadcastStream().map((event) {
       final status = batteryStatusFromJson(json.encode(event));
       // The plugin has just started listening to battery status
-      if (currentStatus == null) {
-        currentStatus = status;
-      }
+
       // The device was earlier charging, now it is discharging
-      else if (currentStatus?.chargingStatus == "charging" &&
+      if (currentStatus?.chargingStatus == "charging" &&
           status.chargingStatus == "discharging") {
         setBatteryLog(currentStatus!, status).then((value) {
           history.add(value);
         });
-      } else {}
+        currentStatus = null;
+      } else if (currentStatus == null && status.chargingStatus == "charging") {
+        currentStatus = status;
+      }
+
       return BatteryHistory(status: status, history: history);
     });
   }
